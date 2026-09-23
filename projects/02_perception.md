@@ -1,12 +1,14 @@
 # G2 — Восприятие препятствий и локальная проходимость
 
-**2 студента.** Исследовательский вопрос: насколько CNN улучшает обнаружение непроходимых областей при шуме глубины, изменении освещения и новых формах препятствий?
+Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
+
+**2 студента.** Исследовательский вопрос: насколько CNN (Convolutional Neural Network — свёрточная нейронная сеть) улучшает обнаружение непроходимых областей при шуме глубины, изменении освещения и новых формах препятствий?
 
 ## Два метода
 
-**A — классический:** из RGB-D восстановить cloud, выделить плоскость пола (RANSAC), отфильтровать точки по высоте и объединить obstacle clusters; проектировать их в локальную сетку. Цвет не обязателен для эвристики, но доступен обоим методам.
+**A — классический:** из RGB-D (Red, Green, Blue and Depth — цветное изображение и карта глубины) восстановить cloud, выделить плоскость пола (RANSAC (Random Sample Consensus — оценивание модели по согласованности случайных выборок)), отфильтровать точки по высоте и объединить obstacle clusters; проектировать их в локальную сетку. Цвет не обязателен для эвристики, но доступен обоим методам.
 
-**B — DL:** компактная RGB-D CNN с классами `free / obstacle / unknown`, затем та же геометрическая проекция в grid. Invalid depth остаётся unknown; сеть не имеет права объявить область с отсутствующей геометрией безопасной только по цвету. Выходные интерфейсы и postprocessing согласованы.
+**B — DL (Deep Learning — глубокое обучение):** компактная RGB-D CNN с классами `free / obstacle / unknown`, затем та же геометрическая проекция в grid. Invalid depth остаётся unknown; сеть не имеет права объявить область с отсутствующей геометрией безопасной только по цвету. Выходные интерфейсы и postprocessing согласованы.
 
 ## Задачи
 
@@ -19,14 +21,14 @@
 
 ## Вход / выход
 
-Входы: RGB, depth, CameraInfo, TF. Выход: `/perception/obstacles` с occupancy 0–100 и unknown −1; frame `odom`. Номинально окно 10 × 10 м, resolution 0.05 м, publication 10 Гц; origin обязан соответствовать координатам сетки, а не индексу робота.
+Входы: RGB (Red, Green, Blue — красный, зелёный и синий цветовые каналы), depth, CameraInfo, TF (Transform library — библиотека преобразований между системами координат). Выход: `/perception/obstacles` с occupancy 0–100 и unknown −1; frame `odom`. Номинально окно 10 × 10 м, resolution 0.05 м, publication 10 Гц; origin обязан соответствовать координатам сетки, а не индексу робота.
 
 ## Эксперименты и метрики
 
-IoU каждого класса и macro-IoU, obstacle precision/recall, false-free rate среди GT obstacle cells, latency p50/p95/p99 и peak RSS. Оценка в общей valid ROI; unknown/occluded GT обрабатывается отдельно. Сравнивать perception metrics на одинаковых replay frames; влияние на collision/success — в интеграции. Сценарии: normal, low light, thin obstacles, depth holes; ablation без RGB либо без augmentation.
+IoU (Intersection over Union — отношение площади пересечения к площади объединения) каждого класса и macro-IoU, obstacle precision/recall, false-free rate среди GT (Ground Truth — эталонные данные для обучения или оценки) obstacle cells, latency p50 (50th percentile — 50-й процентиль, медиана)/p95 (95th percentile — 95-й процентиль)/p99 (99th percentile — 99-й процентиль) и peak RSS (Resident Set Size — объём физической памяти, занятой процессом). Оценка в общей valid ROI (Region of Interest — область интереса, в которой проводится оценка); unknown/occluded GT обрабатывается отдельно. Сравнивать perception metrics на одинаковых replay frames; влияние на collision/success — в интеграции. Сценарии: normal, low light, thin obstacles, depth holes; ablation без RGB либо без augmentation.
 
-Отдельно привести confusion matrix, ошибки по расстоянию и не менее трёх failure cases. Независимый LiDAR safety monitor не является частью качества CNN и не должен скрывать её false-free ошибки.
+Отдельно привести confusion matrix, ошибки по расстоянию и не менее трёх failure cases. Независимый LiDAR (Light Detection and Ranging — измерение расстояний с помощью света; лазерный дальномер) safety monitor не является частью качества CNN и не должен скрывать её false-free ошибки.
 
 ## Приёмка и артефакты
 
-Пакет `capstone_perception`, генератор/описание датасета, классический pipeline, обученная модель, тесты invalid depth и frame mismatch, model card, CSV и отчёт. Во время live run нет simulator segmentation labels на входе узла; они доступны только в обучении/evaluator. Роли: студент 1 — geometry/ROS/replay; студент 2 — CNN/export/calibration; взаимное review и совместный analysis.
+Пакет `capstone_perception`, генератор/описание датасета, классический pipeline, обученная модель, тесты invalid depth и frame mismatch, model card, CSV (Comma-Separated Values — табличный текстовый формат со значениями, разделёнными запятыми) и отчёт. Во время live run нет simulator segmentation labels на входе узла; они доступны только в обучении/evaluator. Роли: студент 1 — geometry/ROS (Robot Operating System — программная платформа для робототехники)/replay; студент 2 — CNN/export/calibration; взаимное review и совместный analysis.

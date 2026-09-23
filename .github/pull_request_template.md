@@ -1,5 +1,7 @@
 ## Задача и изменения
 
+Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
+
 Связанное issue / группа / затронутые consumers:
 
 ## Проверки
@@ -8,4 +10,4 @@
 
 ## Контракты и воспроизведение
 
-Изменения topics/frames/QoS/config/model hashes; кто выполнил cross-group review:
+Изменения topics/frames/QoS (Quality of Service — политики качества обслуживания при передаче сообщений)/config/model hashes; кто выполнил cross-group review:

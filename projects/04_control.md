@@ -1,14 +1,16 @@
-# G4 — Локальное управление, PPO и независимая безопасность
+# G4 — Локальное управление, PPO (Proximal Policy Optimization — алгоритм оптимизации политики с ограничением величины её обновления) и независимая безопасность
 
-**3 студента.** Исследовательский вопрос: как PPO и MPC отличаются по tracking, избеганию препятствий и устойчивости к model mismatch при одинаковом safety monitor?
+Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
+
+**3 студента.** Исследовательский вопрос: как PPO и MPC (Model Predictive Control — управление с прогнозирующей моделью) отличаются по tracking, избеганию препятствий и устойчивости к model mismatch при одинаковом safety monitor?
 
 ## Два метода
 
 **A — классический:** receding-horizon MPC для differential-drive модели; tracking/path progress, effort, constraints на скорость/ускорение и препятствия. Обосновать horizon, weights, discretization и поведение при infeasible solve. Готовый solver допустим, собственные formulation и tests обязательны.
 
-**B — RL:** PPO выдаёт `(v, ω)` по robot-frame path segment, оценке состояния и local obstacle grid/ranges. Observation и action specification, normalization, reward, terminal conditions и training budget фиксируются в Git. Оба метода имеют доступ к одинаковой информации; PPO не получает GT pose или будущие препятствия.
+**B — RL (Reinforcement Learning — обучение с подкреплением):** PPO выдаёт `(v, ω)` по robot-frame path segment, оценке состояния и local obstacle grid/ranges. Observation и action specification, normalization, reward, terminal conditions и training budget фиксируются в Git. Оба метода имеют доступ к одинаковой информации; PPO не получает GT (Ground Truth — эталонные данные для обучения или оценки) pose или будущие препятствия.
 
-Независимый deterministic safety monitor одинаков у A и B. Он проверяет freshness, пределы, NaN, stopping distance и ближайшие препятствия по raw LiDAR. Он единственный публикует `/cmd_vel`. Он не заменяет корректность контроллера.
+Независимый deterministic safety monitor одинаков у A и B. Он проверяет freshness, пределы, NaN (Not a Number — специальное значение «не число»), stopping distance и ближайшие препятствия по raw LiDAR (Light Detection and Ranging — измерение расстояний с помощью света; лазерный дальномер). Он единственный публикует `/cmd_vel`. Он не заменяет корректность контроллера.
 
 ## Задачи
 
@@ -21,11 +23,11 @@
 
 ## Вход / выход
 
-`/control/follow_path` (`nav2_msgs/action/FollowPath`), `/state/odom`, TF, `/perception/obstacles`, scan → `/control/cmd_vel_raw` (`TwistStamped`); monitor → `/cmd_vel` (`TwistStamped`). Simulator adapter снимает stamp только если его driver требует unstamped Twist. Оба controller modes работают 20 Гц.
+`/control/follow_path` (`nav2_msgs/action/FollowPath`), `/state/odom`, TF (Transform library — библиотека преобразований между системами координат), `/perception/obstacles`, scan → `/control/cmd_vel_raw` (`TwistStamped`); monitor → `/cmd_vel` (`TwistStamped`). Simulator adapter снимает stamp только если его driver требует unstamped Twist. Оба controller modes работают 20 Гц.
 
 ## Эксперименты и метрики
 
-Cross-track RMSE/p95, yaw error, success/collision/timeout, min clearance, время, variation управляющего сигнала `sum ||u[t]-u[t-1]||`, constraint violation counts, p95/p99 cycle latency, missed deadlines. Показать intervention rate monitor, причины fallback и результат каждого training seed. Reward curve — дополнительный training diagnostic.
+Cross-track RMSE (Root Mean Square Error — среднеквадратическая ошибка)/p95 (95th percentile — 95-й процентиль), yaw error, success/collision/timeout, min clearance, время, variation управляющего сигнала `sum ||u[t]-u[t-1]||`, constraint violation counts, p95/p99 (99th percentile — 99-й процентиль) cycle latency, missed deadlines. Показать intervention rate monitor, причины fallback и результат каждого training seed. Reward curve — дополнительный training diagnostic.
 
 Тесты: прямой/кривой путь, динамическое препятствие, payload/model mismatch ±20%, задержки. Ablation: PPO без domain randomization. Прогоны без shield допускаются только в симуляторе и маркируются отдельно; они не входят в основной безопасный deployment. Отключение shield не является обязательным.
 

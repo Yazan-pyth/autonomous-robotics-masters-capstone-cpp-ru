@@ -1,12 +1,14 @@
 # G5 — Миссии, диспетчеризация и общая сборка
 
-**2 студента.** Исследовательский вопрос: улучшает ли DQN выбор заявок относительно фиксированного dispatch rule при задержках и ограниченных сроках?
+Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
+
+**2 студента.** Исследовательский вопрос: улучшает ли DQN (Deep Q-Network — глубокая нейронная сеть для оценки ценности действий) выбор заявок относительно фиксированного dispatch rule при задержках и ограниченных сроках?
 
 ## Два метода
 
-**A — классический:** Behavior Tree управляет `wait → select job → navigate pickup → service → navigate dropoff → service/recover`; выбор — earliest due date, tie-break по оценённой длине маршрута, затем job ID.
+**A — классический:** Behavior Tree управляет `wait → select job → navigate pickup → service → navigate dropoff → service/recover`; выбор — earliest due date, tie-break по оценённой длине маршрута, затем job ID (Identifier — идентификатор).
 
-**B — RL:** тот же BT, но DQN выбирает следующую заявку из максимум четырёх pending jobs или `wait`. Observation: оценки travel time, slack, queue age, robot/load state, последние navigation failures. Невалидные действия маскируются одинаково при training и inference; при неизвестном ID/NaN — fallback A. Новые заявки поступают по одному расписанию для A/B, без доступа к будущим arrival events.
+**B — RL (Reinforcement Learning — обучение с подкреплением):** тот же BT (Behavior Tree — дерево поведения), но DQN выбирает следующую заявку из максимум четырёх pending jobs или `wait`. Observation: оценки travel time, slack, queue age, robot/load state, последние navigation failures. Невалидные действия маскируются одинаково при training и inference; при неизвестном ID/NaN (Not a Number — специальное значение «не число») — fallback A. Новые заявки поступают по одному расписанию для A/B, без доступа к будущим arrival events.
 
 DQN не управляет мотором, не меняет пути напрямую и не учится заново во время test. Выбор делается только когда робот свободен; активную доставку нельзя бросить ради удобной статистики. Повторная навигация и recovery остаются в общем BT.
 
@@ -27,10 +29,10 @@ DQN не управляет мотором, не меняет пути напр�
 
 ## Эксперименты и метрики
 
-Completed deliveries per simulated hour, on-time delivery rate среди всех released jobs, mean/p95 tardiness (для завершённых) + отдельно unfinished jobs и их age. Дополнительно makespan для finite-job suite, traveled distance per completed job, idle time, failed jobs, recoveries и decision latency. Если completed=0, distance/job — NA, а не ноль.
+Completed deliveries per simulated hour, on-time delivery rate среди всех released jobs, mean/p95 (95th percentile — 95-й процентиль) tardiness (для завершённых) + отдельно unfinished jobs и их age. Дополнительно makespan для finite-job suite, traveled distance per completed job, idle time, failed jobs, recoveries и decision latency. Если completed=0, distance/job — NA (Not Available — значение отсутствует или не определено для данного случая), а не ноль.
 
 Тесты: низкая/высокая интенсивность заявок, узкое место, blocked route, неравные deadlines. Ablation: DQN без congestion feature. Isolated dispatch тестировать на фиксированных train-independent travel tables; closed-loop — с одинаковыми G1–G4. Не выдавать выигрыш на табличной модели за выигрыш полной системы.
 
 ## Приёмка и артефакты
 
-Пакеты `capstone_mission`, `capstone_benchmark`, bringup configs, BT XML, DQN artifacts, ledger и report. Тесты: empty queue, masked actions, pickup/dropoff order, action cancel, retry limit, failure to stop. Роли: студент 1 — BT/interfaces; студент 2 — DQN/evaluation; координация CI и runner совместная. G5 не несёт единоличную ответственность за ошибки остальных групп.
+Пакеты `capstone_mission`, `capstone_benchmark`, bringup configs, BT XML (Extensible Markup Language — расширяемый язык разметки), DQN artifacts, ledger и report. Тесты: empty queue, masked actions, pickup/dropoff order, action cancel, retry limit, failure to stop. Роли: студент 1 — BT/interfaces; студент 2 — DQN/evaluation; координация CI (Continuous Integration — непрерывная интеграция; автоматическая сборка и проверки) и runner совместная. G5 не несёт единоличную ответственность за ошибки остальных групп.
