@@ -2,7 +2,7 @@
 
 Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
 
-**2 студента.** Исследовательский вопрос: улучшает ли DQN (Deep Q-Network — глубокая нейронная сеть для оценки ценности действий) выбор заявок относительно фиксированного dispatch rule при задержках и ограниченных сроках?
+Исследовательский вопрос: улучшает ли DQN (Deep Q-Network — глубокая нейронная сеть для оценки ценности действий) выбор заявок относительно фиксированного dispatch rule при задержках и ограниченных сроках?
 
 ## Два метода
 
@@ -35,4 +35,4 @@ Completed deliveries per simulated hour, on-time delivery rate среди все
 
 ## Приёмка и артефакты
 
-Пакеты `capstone_mission`, `capstone_benchmark`, bringup configs, BT XML (Extensible Markup Language — расширяемый язык разметки), DQN artifacts, ledger и report. Тесты: empty queue, masked actions, pickup/dropoff order, action cancel, retry limit, failure to stop. Роли: студент 1 — BT/interfaces; студент 2 — DQN/evaluation; координация CI (Continuous Integration — непрерывная интеграция; автоматическая сборка и проверки) и runner совместная. G5 не несёт единоличную ответственность за ошибки остальных групп.
+Пакеты `capstone_mission`, `capstone_benchmark`, bringup configs, BT XML (Extensible Markup Language — расширяемый язык разметки), DQN artifacts, ledger и report. Тесты: empty queue, masked actions, pickup/dropoff order, action cancel, retry limit, failure to stop. Обязанности по реализации, проверке и интеграции распределяются внутри группы. G5 не несёт единоличную ответственность за ошибки остальных групп.

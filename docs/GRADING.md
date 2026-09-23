@@ -52,6 +52,6 @@ Test leakage делает затронутые экспериментальны�
 - 5 group reports + 1 integration report, raw CSV (Comma-Separated Values — табличный текстовый формат со значениями, разделёнными запятыми)/aggregates/plots.
 - Scenario/model/dataset manifests и воспроизводимые команды.
 - Demo C0/C6, fault demonstration, logs по семи конфигурациям.
-- 12 contribution records, защита обоих методов каждым студентом.
+- Индивидуальные записи вклада всех участников, защита обоих методов каждым студентом.
 
 Студенты не получают дополнительные баллы за GPU (Graphics Processing Unit — графический процессор), дорогую модель или реального робота вместо полноты минимального задания.

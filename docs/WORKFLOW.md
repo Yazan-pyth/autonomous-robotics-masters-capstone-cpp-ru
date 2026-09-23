@@ -2,30 +2,23 @@
 
 Сокращения раскрыты при первом употреблении; [полный словарь терминов](GLOSSARY.md).
 
-## Роли 12 студентов
+## Ответственность подгрупп
 
-| Студент | Группа | Основная зона | Интеграционная обязанность |
-|---|---|---|---|
-| S01 | G1 | EKF (Extended Kalman Filter — расширенный фильтр Калмана)/ICP (Iterative Closest Point — итеративный алгоритм ближайших точек для совмещения облаков точек)/TF (Transform library — библиотека преобразований между системами координат) | State contract с G4 |
-| S02 | G1 | Learned covariance/data | Model metadata и replay с G3 |
-| S03 | G1 | Simulator/robot/sensors | Bridge, clocks, reset с G5 |
-| S04 | G2 | Geometric perception | RGB-D (Red, Green, Blue and Depth — цветное изображение и карта глубины)/TF contract с G1 |
-| S05 | G2 | CNN (Convolutional Neural Network — свёрточная нейронная сеть)/inference | Obstacle grid contract с G3/G4 |
-| S06 | G3 | A* (A-star — алгоритм поиска пути с оценкой уже пройденной стоимости и эвристикой оставшегося пути)/action | Path/cancel contract с G4/G5 |
-| S07 | G3 | Learned cost | Replan scenario и validation с G2 |
-| S08 | G4 | MPC (Model Predictive Control — управление с прогнозирующей моделью) | FollowPath и failure feedback с G5 |
-| S09 | G4 | PPO (Proximal Policy Optimization — алгоритм оптимизации политики с ограничением величины её обновления) | Model loading и CPU (Central Processing Unit — центральный процессор) budget с G1/G2 |
-| S10 | G4 | Safety/faults | Driver watchdog с G1 |
-| S11 | G5 | BT (Behavior Tree — дерево поведения)/dispatch | Общий bringup/CI (Continuous Integration — непрерывная интеграция; автоматическая сборка и проверки) с владельцами пакетов |
-| S12 | G5 | DQN (Deep Q-Network — глубокая нейронная сеть для оценки ценности действий)/benchmark | Manifest/metrics API (Application Programming Interface — программный интерфейс) со всеми группами |
+| Подгруппа | Основная ответственность | Интеграционная обязанность |
+|---|---|---|
+| G1 | Локализация, карта, симулятор и датчики | Согласовать состояние робота, системы координат, время и сброс |
+| G2 | Геометрическое и обучаемое восприятие | Передать карту препятствий планировщику и контроллеру |
+| G3 | Классическое и обучаемое планирование | Согласовать путь, отмену задачи и перепланирование |
+| G4 | Классическое и обучаемое управление, безопасность | Обеспечить защитную остановку и обратную связь о движении |
+| G5 | Миссии, диспетчеризация, общая сборка и эксперименты | Согласовать запуск, журналы и расчёт общих метрик со всеми группами |
 
-S01…S12 — placeholders; имена студенты подставляют при старте. Роли не освобождают от понимания второго метода. Integration lead ротируется по группам раз в две недели; один студент не должен становиться единственным человеком, который умеет запускать систему.
+Обязанности распределяются внутри каждой группы. Каждый участник должен понимать оба метода своего подпроекта и участвовать в интеграции. Координация интеграции передаётся между группами раз в две недели; запуск системы и диагностика должны быть доступны всей команде.
 
 ## Milestones на 14 недель
 
 | Неделя | Результат и критерий готовности |
 |---|---|
-| 1 | Команды, research questions, literature review, clone/build starter, учёт доступных CPU/GPU (Graphics Processing Unit — графический процессор) |
+| 1 | Команды, research questions, literature review, clone/build starter, учёт доступных CPU (Central Processing Unit — центральный процессор)/GPU (Graphics Processing Unit — графический процессор) |
 | 2 | Freeze интерфейсов v1, simulator choice, sensors/limits, split и scenario manifests, budget на обучение |
 | 3–4 | Robot/sensors + все classical stubs заменены рабочими методами; первая C0 доставка; CI (Continuous Integration — непрерывная интеграция; автоматическая сборка и проверки) и replay |
 | 5–6 | Устойчивый C0, train data, correctness tests, baseline metrics; никаких ожиданий готовности чужой модели |

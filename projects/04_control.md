@@ -2,7 +2,7 @@
 
 Сокращения раскрыты при первом употреблении; [полный словарь терминов](../docs/GLOSSARY.md).
 
-**3 студента.** Исследовательский вопрос: как PPO и MPC (Model Predictive Control — управление с прогнозирующей моделью) отличаются по tracking, избеганию препятствий и устойчивости к model mismatch при одинаковом safety monitor?
+Исследовательский вопрос: как PPO и MPC (Model Predictive Control — управление с прогнозирующей моделью) отличаются по tracking, избеганию препятствий и устойчивости к model mismatch при одинаковом safety monitor?
 
 ## Два метода
 
@@ -33,4 +33,4 @@ Cross-track RMSE (Root Mean Square Error — среднеквадратичес�
 
 ## Приёмка и артефакты
 
-Пакеты `capstone_control`, `capstone_safety`; formulation MPC, PPO training code/model, safety thresholds, fault logs, C++ tests, metrics и отчёт. При silent publisher downstream watchdog останавливает robot; один последний нулевой Twist недостаточен. Роли: студент 1 — MPC; студент 2 — PPO; студент 3 — monitor/faults. Каждый участвует в общей интеграции.
+Пакеты `capstone_control`, `capstone_safety`; formulation MPC, PPO training code/model, safety thresholds, fault logs, C++ tests, metrics и отчёт. При silent publisher downstream watchdog останавливает robot; один последний нулевой Twist недостаточен. Обязанности по реализации, проверке и интеграции распределяются внутри группы. Каждый участвует в общей интеграции.
