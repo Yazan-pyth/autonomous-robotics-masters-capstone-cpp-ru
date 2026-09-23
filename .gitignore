@@ -1,0 +1,15 @@
+build/
+install/
+log/
+.venv/
+__pycache__/
+.env
+*.bag
+*.db3
+*.mcap
+*.onnx
+*.pt
+*.pth
+*.zip
+results/
+.DS_Store

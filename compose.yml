@@ -1,0 +1,23 @@
+services:
+  simulator:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: simulator
+    environment:
+      ROS_DOMAIN_ID: "42"
+      ROS_LOCALHOST_ONLY: "0"
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    init: true
+  autonomy:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: autonomy
+    environment:
+      ROS_DOMAIN_ID: "42"
+      ROS_LOCALHOST_ONLY: "0"
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    depends_on:
+      - simulator
+    init: true
